@@ -9,3 +9,6 @@ class TfidfVectorizerWrapper:
     
     def get_feature_names(self):
         return self.vectorizer.get_feature_names_out()
+    
+    def inverse_transform(self, tfidf_matrix):
+        self.vectorizer.inverse_transform(tfidf_matrix)
