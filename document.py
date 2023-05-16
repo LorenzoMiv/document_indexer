@@ -1,8 +1,8 @@
 class Document:
-    serialId = 0
     
-    def __init__(self, terms, tf_idf):
-        self.doc_id = Document.serialId
-        Document.serialId += 1
-        self.terms = terms
-        self.tf_idf = tf_idf
+    def __init__(self, doc_id, term_scores):
+        self.doc_id = doc_id
+        self.term_scores = term_scores
+
+    def display(self):
+        print("doc:", self.doc_id, "\nterms:\n", self.term_scores)

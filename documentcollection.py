@@ -9,16 +9,18 @@ class DocumentCollection:
         #It would be a better implementation to throw this matrix out after the documents are generated
         #for now I'm keeping it since there may be additional operations to perform on the matrix
         self.tfidf_matrix = self.vectorizer.fit_transform(documents)
-        self.documents = self.add_documents(len(documents))
+        #print(self.vectorizer)
+        #print(self.vectorizer.get_feature_names())
+        #print(self.tfidf_matrix)
+        self.documents = self.add_documents()
 
-    def add_documents(self, document_count):
-        #eventually this should use get_feature_names_out instead of inverse_transform
-        #do not currently know how to identify the source document with get_feature_names_out
-        term_lists = self.vectorizer.inverse_transform(self.tfidf_matrix)
-        documents = []
-        for i in range(document_count):
-            tfidf_scores = self.tfidf_matrix[i]
-            doc_terms = term_lists[i]
-            documents.append(document.Document(doc_terms, tfidf_scores))
-        return documents
-            
+    def add_documents(self):
+        document_dict = {}
+        term_lib = self.vectorizer.get_feature_names()
+        for row_num in range(self.tfidf_matrix.get_shape()[0]):
+            term_scores = []
+            row  = self.tfidf_matrix.getrow(row_num)
+            for col in row.nonzero()[1]:
+                term_scores.append((term_lib[col], self.tfidf_matrix[row_num, col]))
+            document_dict[row_num] = document.Document(row_num, term_scores)
+        return document_dict
