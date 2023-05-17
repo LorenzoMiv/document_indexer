@@ -15,3 +15,7 @@ class TfidfVectorizerWrapper:
     
     def inverse_transform(self, tfidf_matrix):
         self.vectorizer.inverse_transform(tfidf_matrix)
+    
+    def set_params(self):
+        self.vectorizer.set_params(stop_words='english')
+        
