@@ -1,2 +1,3 @@
 # document_indexer
-Use inverted index, tf-idf, and LSH to perform fast and accurate similarity querying of documents.
+This is a summer project I'm working on in my free time. The project is meant to give me an introductory experience with speeding up queries and improving their accuracy. TF-IDF vectorization provides a ranking of terms in the document to prioritize documents most relevant to the query. An inverted index allows for fast lookup of terms. I plan to use locality-sensitive hashing to reduce the number of considered documents during the search process. In early stages the document reader will be limited to locally stored files, but I plan to have it interact with web documents and microcontroller outputs in the future. 
+Thanks for taking interest in my project. Contact me anytime at seancollins362@gmail.com.
