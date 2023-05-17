@@ -17,10 +17,15 @@ class DocumentCollection:
     def add_documents(self):
         document_dict = {}
         term_lib = self.vectorizer.get_feature_names()
+        #shape returns the number of rows in the matrix
         for row_num in range(self.tfidf_matrix.get_shape()[0]):
             term_scores = []
+            #isolate the row
             row  = self.tfidf_matrix.getrow(row_num)
+            #nonzero gets the column numbers of terms contained in each doc
             for col in row.nonzero()[1]:
                 term_scores.append((term_lib[col], self.tfidf_matrix[row_num, col]))
+            #eventually this code should be changed so that adding a document
+            #takes the next available place in the dictionary
             document_dict[row_num] = document.Document(row_num, term_scores)
         return document_dict
