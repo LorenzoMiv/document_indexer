@@ -27,5 +27,5 @@ print("\nshowing inverted index:")
 inv_index.display()
 
 #LSH
-
+lsh = lsh_index.LSHindex(collection, 0.5)
 
