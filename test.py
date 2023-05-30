@@ -2,6 +2,7 @@ import documentcollection
 import vectorizerwrapper
 import invertedindex
 import lsh_index
+import mongoDBconnection
 
 def test_document_collection(collection: documentcollection.DocumentCollection):
     for doc in collection.documents:
@@ -27,5 +28,37 @@ print("\nshowing inverted index:")
 inv_index.display()
 
 #LSH
-lsh = lsh_index.LSHindex(collection, 0.5)
+#lsh = lsh_index.LSHindex(collection, 0.5)
 
+# Mongodb connection test
+connectionString = 'mongodb+srv://aXs35Ah10vEFCiaX:aXs35Ah10vEFCiaX@cluster0.niqlshf.mongodb.net/?retryWrites=true&w=majority'
+retriever = mongoDBconnection.MongoDBPayloadRetriever(connectionString, 'test')
+sensor_data = retriever.retrieve_payloads()
+#for sensor_name, values in sensor_data.items():
+#    print(sensor_name, values , "\n\n")
+
+sensor_list = []
+for sensor_name in sensor_data:
+    sensor_list.append(sensor_name)
+
+print("showing the list of sensor names: ")
+print(sensor_list, '\n\n')
+
+sensor_collection = documentcollection.DocumentCollection(sensor_list, vect)
+print("showing collection:")
+test_document_collection(sensor_collection)
+
+sensor_inv_index = invertedindex.InvertedIndex(sensor_collection.documents)
+print("\nshowing inverted index:")
+sensor_inv_index.display()
+
+print("type a query term")
+term  = input()
+#print(sensor_inv_index.matrix.get(term))
+high_score = 0
+best_doc = -1
+for document in sensor_inv_index.matrix.get(term):
+    if document[1] > high_score:
+        best_doc = document[0]
+
+print('\n', sensor_list[best_doc], '\n', sensor_data.get(sensor_list[best_doc]))
