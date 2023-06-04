@@ -61,9 +61,14 @@ print("type a query term")
 term  = input()
 #print(sensor_inv_index.matrix.get(term))
 high_score = 0
-best_doc = 0
+best_doc = -1
 for document in sensor_inv_index.matrix.get(term):
     if document[1] > high_score:
         best_doc = document[0]
+if best_doc == -1:
+    print("not a term in the index")
+else:
+    print('\n', sensor_list[best_doc], '\n', sensor_data.get(sensor_list[best_doc]))
 
-print('\n', sensor_list[best_doc], '\n', sensor_data.get(sensor_list[best_doc]))
+#cosine similarity query
+print("\n\ntype several terms and get the most relevant query")
