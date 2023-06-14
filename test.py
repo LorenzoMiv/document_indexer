@@ -60,7 +60,7 @@ for indices in range(len(collection_ind)):
 
 #create a new document collection containing the sensor names
 sensor_collection = documentcollection.DocumentCollection(collection_list, vect)
-print("\n\nshowing collection:")
+print("\n\nshowing term scores by document:")
 test_document_collection(sensor_collection)
 
 #create an inverted index of the sensor names and calculating tf-idf for each word in the name
@@ -69,21 +69,26 @@ print("\n\nshowing inverted index:")
 sensor_inv_index.display()
 
 #simple demo query that finds the document with the highest score for any query term
-print("\n\ntype a query term")
-term  = input()
-print(sensor_inv_index.matrix.get(term))
-high_score = 0
-best_doc = -1
-for document in sensor_inv_index.matrix.get(term):
-    if document[1] > high_score:
-        best_doc = document[0]
-if best_doc == -1:
-    print("not a term in the index")
-else:
-    print('\n', "most relevant table:\n", collection_ind[best_doc], "\n\ntable contents:\n")
-    for sensor in collection_data[collection_ind[best_doc]]:
-        print(sensor, collection_data[collection_ind[best_doc]][sensor], "\n")
-          #, '\n', sensor_data.get(sensor_list[best_doc]))
+flag = 1
+while flag:
+    print("\n\ntype a query term or type q to quit")
+    term  = input()
+    if term == 'q':
+        flag = 0
+    else:
+        print(sensor_inv_index.matrix.get(term))
+        high_score = 0
+        best_doc = -1
+        for document in sensor_inv_index.matrix.get(term):
+            if document[1] > high_score:
+                best_doc = document[0]
+        if best_doc == -1:
+            print("not a term in the index")
+        else:
+            print('\n', "most relevant table:\n", collection_ind[best_doc], "\n\ntable contents:\n")
+            for sensor in collection_data[collection_ind[best_doc]]:
+                print(sensor, collection_data[collection_ind[best_doc]][sensor], "\n")
+                    #, '\n', sensor_data.get(sensor_list[best_doc]))
 
 #cosine similarity query
 

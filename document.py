@@ -5,4 +5,4 @@ class Document:
         self.term_scores = term_scores
 
     def display(self):
-        print("doc:", self.doc_id, "terms:\n", self.term_scores)
+        print("doc:", self.doc_id, "terms:", self.term_scores)
