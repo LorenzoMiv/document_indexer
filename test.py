@@ -33,21 +33,28 @@ inv_index.display()
 # Mongodb connection test
 connectionString = 'mongodb+srv://aXs35Ah10vEFCiaX:aXs35Ah10vEFCiaX@cluster0.niqlshf.mongodb.net/?retryWrites=true&w=majority'
 retriever = mongoDBconnection.MongoDBPayloadRetriever(connectionString, 'test')
-sensor_data = retriever.retrieve_payloads()
-#for sensor_name, values in sensor_data.items():
-#    print(sensor_name, values , "\n\n")
+collection_data = retriever.retrieve_payloads()
+#for collection_name, sensor_data in collection_data.items():   
+#    print(collection_name, "\n===========================================================================") 
+#    for sensor_name, values in sensor_data.items():
+#        print("\n", sensor_name, values)
+#    print("==========================================================================\n\n")
 
 #create a list of sensor names and all of the data points associated with them
 #sensor data also have a timestamp and topic field that are not accessed here
-sensor_list = []
-for sensor_name in sensor_data:
-    sensor_list.append(sensor_name)
 
-print("showing the list of sensor names: ")
-print(sensor_list, '\n\n')
+collection_list = []
+for collection_name in collection_data:
+    sensor_list = ""
+    for sensor_name in collection_data[collection_name]:
+        sensor_list += sensor_name + " "
+    collection_list.append(sensor_list)    
+
+#print("showing the list of sensor names: ")
+#print(collection_dict, '\n\n')
 
 #create a new document collection containing the sensor names
-sensor_collection = documentcollection.DocumentCollection(sensor_list, vect)
+sensor_collection = documentcollection.DocumentCollection(collection_list, vect)
 print("showing collection:")
 test_document_collection(sensor_collection)
 
@@ -60,15 +67,16 @@ sensor_inv_index.display()
 print("type a query term")
 term  = input()
 #print(sensor_inv_index.matrix.get(term))
-high_score = 0
-best_doc = -1
-for document in sensor_inv_index.matrix.get(term):
-    if document[1] > high_score:
-        best_doc = document[0]
-if best_doc == -1:
-    print("not a term in the index")
-else:
-    print('\n', sensor_list[best_doc], '\n', sensor_data.get(sensor_list[best_doc]))
+#high_score = 0
+#best_doc = -1
+#for document in sensor_inv_index.matrix.get(term):
+#    if document[1] > high_score:
+#        best_doc = document[0]
+#if best_doc == -1:
+#    print("not a term in the index")
+#else:
+#    print('\n', sensor_list[best_doc], '\n', sensor_data.get(sensor_list[best_doc]))
 
 #cosine similarity query
+
 print("\n\ntype several terms and get the most relevant query")

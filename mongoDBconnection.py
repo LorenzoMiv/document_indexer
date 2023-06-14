@@ -12,11 +12,11 @@ class MongoDBPayloadRetriever:
 
         # Get a list of all collection names
         collection_names = db.list_collection_names()
-        sensor_data = {}
+        collection_data = {}
         # Iterate over each collection
         for collection_name in collection_names:
             collection = db[collection_name]
-
+            sensor_data = {}
             # Retrieve the payload field from each document in the collection
             documents = collection.find()
             for document in documents:
@@ -29,9 +29,10 @@ class MongoDBPayloadRetriever:
                                 sensor_data[field_name] = [field_value]
                             else:
                                 sensor_data[field_name].append(field_value)
+            collection_data[collection_name] = sensor_data
 
         client.close()
 
-        return sensor_data
+        return collection_data
 
 
