@@ -21,5 +21,5 @@ class InvertedIndex:
         for term in terms:
             print("term:", term)
             print("document id and score:")
-            print(self.matrix[term], "\n")
+            print(self.matrix[term])
             

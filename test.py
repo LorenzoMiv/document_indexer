@@ -18,14 +18,14 @@ doc_list = [document1, document2, document3]
 vect = vectorizerwrapper.TfidfVectorizerWrapper()
 #parameter for filtering stop words
 vect.set_params()
-collection = documentcollection.DocumentCollection(doc_list, vect)
-print("showing collection:")
-test_document_collection(collection)
+#collection = documentcollection.DocumentCollection(doc_list, vect)
+#print("showing collection:")
+#test_document_collection(collection)
 
 #inverted index
-inv_index = invertedindex.InvertedIndex(collection.documents)
-print("\nshowing inverted index:")
-inv_index.display()
+#inv_index = invertedindex.InvertedIndex(collection.documents)
+#print("\nshowing inverted index:")
+#inv_index.display()
 
 #LSH
 #lsh = lsh_index.LSHindex(collection, 0.5)
@@ -42,41 +42,49 @@ collection_data = retriever.retrieve_payloads()
 
 #create a list of sensor names and all of the data points associated with them
 #sensor data also have a timestamp and topic field that are not accessed here
-
+collection_ind = []
 collection_list = []
+ind = 0
 for collection_name in collection_data:
     sensor_list = ""
     for sensor_name in collection_data[collection_name]:
         sensor_list += sensor_name + " "
-    collection_list.append(sensor_list)    
+    #this is a bad temporary solution, a better choice for these two lists would probably be an object or to just use collection_data
+    collection_list.append(sensor_list)  
+    collection_ind.append(collection_name)
 
-#print("showing the list of sensor names: ")
-#print(collection_dict, '\n\n')
+
+print("listing sensor names by table: ")
+for indices in range(len(collection_ind)):
+    print(collection_ind[indices], ": ", collection_list[indices])
 
 #create a new document collection containing the sensor names
 sensor_collection = documentcollection.DocumentCollection(collection_list, vect)
-print("showing collection:")
+print("\n\nshowing collection:")
 test_document_collection(sensor_collection)
 
 #create an inverted index of the sensor names and calculating tf-idf for each word in the name
 sensor_inv_index = invertedindex.InvertedIndex(sensor_collection.documents)
-print("\nshowing inverted index:")
+print("\n\nshowing inverted index:")
 sensor_inv_index.display()
 
 #simple demo query that finds the document with the highest score for any query term
-print("type a query term")
+print("\n\ntype a query term")
 term  = input()
-#print(sensor_inv_index.matrix.get(term))
-#high_score = 0
-#best_doc = -1
-#for document in sensor_inv_index.matrix.get(term):
-#    if document[1] > high_score:
-#        best_doc = document[0]
-#if best_doc == -1:
-#    print("not a term in the index")
-#else:
-#    print('\n', sensor_list[best_doc], '\n', sensor_data.get(sensor_list[best_doc]))
+print(sensor_inv_index.matrix.get(term))
+high_score = 0
+best_doc = -1
+for document in sensor_inv_index.matrix.get(term):
+    if document[1] > high_score:
+        best_doc = document[0]
+if best_doc == -1:
+    print("not a term in the index")
+else:
+    print('\n', "most relevant table:\n", collection_ind[best_doc], "\n\ntable contents:\n")
+    for sensor in collection_data[collection_ind[best_doc]]:
+        print(sensor, collection_data[collection_ind[best_doc]][sensor], "\n")
+          #, '\n', sensor_data.get(sensor_list[best_doc]))
 
 #cosine similarity query
 
-print("\n\ntype several terms and get the most relevant query")
+#print("\n\ntype several terms and get the most relevant query")
