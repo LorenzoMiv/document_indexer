@@ -60,7 +60,7 @@ for indices in range(len(collection_ind)):
 
 #create a new document collection containing the sensor names
 sensor_collection = documentcollection.DocumentCollection(collection_list, vect)
-print("\n\nshowing term scores by document:")
+print("\n\nshowing term scores by table:")
 test_document_collection(sensor_collection)
 
 #create an inverted index of the sensor names and calculating tf-idf for each word in the name
